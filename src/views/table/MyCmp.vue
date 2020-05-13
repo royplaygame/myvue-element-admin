@@ -38,13 +38,31 @@
       <el-table-column
         fixed="right"
         label="操作"
-        width="100">
+        width="180">
         <template slot-scope="scope">
-          <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
-          <el-button type="text" size="small">编辑</el-button>
+          <el-button @click="dialogFormVisible=true" type="success" size="mini">查看</el-button>
+          <el-button type="danger" size="mini">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
+
+    <el-dialog title="收货地址" :visible.sync="dialogFormVisible">
+      <el-form :model="form">
+        <el-form-item label="活动名称" :label-width="formLabelWidth">
+          <el-input v-model="form.name" autocomplete="off"></el-input>
+        </el-form-item>
+        <el-form-item label="活动区域" :label-width="formLabelWidth">
+          <el-select v-model="form.region" placeholder="请选择活动区域">
+            <el-option label="区域一" value="shanghai"></el-option>
+            <el-option label="区域二" value="beijing"></el-option>
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取 消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">确 定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -53,6 +71,19 @@
         name: 'MyCmp',
         data() {
             return {
+                visible:false,
+                dialogFormVisible: false,
+                form: {
+                    name: '',
+                    region: '',
+                    date1: '',
+                    date2: '',
+                    delivery: false,
+                    type: [],
+                    resource: '',
+                    desc: ''
+                },
+                formLabelWidth: '120px',
                 tableData: [{
                     date: '2016-05-02',
                     name: '王小虎',
@@ -82,6 +113,16 @@
                     address: '上海市普陀区金沙江路 1516 弄',
                     zip: 200333
                 }]
+            }
+        },
+        methods: {
+            handleClose(done) {
+                this.$confirm('确认关闭？')
+                    .then(_ => {
+                        done();
+                    })
+                    .catch(_ => {
+                    });
             }
         }
     }
